@@ -1,4 +1,5 @@
-﻿using GenericCrud.Core.Interfaces;
+﻿using Dapper.Contrib.Extensions;
+using GenericCrud.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,59 +8,177 @@ using System.Threading.Tasks;
 
 namespace GenericCrud.Core.Repositories
 {
-    public  class BaseRepository<T> : Connection.Connection, IGenericRepository<T> where T : class
+    public class BaseRepository<T> : Connection.Connection, IGenericRepository<T> where T : class
     {
         public int Add(T entity)
         {
-            using (var con = GetConnection)
+            try
             {
-                return 1;
+                using (var con = GetConnection)
+                {
+                    return (int)con.Insert(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return -1;
             }
         }
-
-        public bool Delete(T entity)
+        public bool Update(T entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    return con.Update(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return false;
+            }
         }
-
-        public bool Delete(int ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public T Get(int ID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    return con.Get<T>(ID);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return null;
+            }
         }
 
         public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    return con.GetAll<T>();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return null;
+            }
         }
+        public bool Delete(T entity)
+        {
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    entity.GetType().GetProperty("IsActive").SetValue(entity, false);
+                    return con.Update(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return false;
+            }
+        }
+
+        public bool Delete(int ID)
+        {
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    T entity = con.Get<T>(ID);
+                    entity.GetType().GetProperty("IsActive").SetValue(entity, false);
+                    return con.Update(entity); 
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return false;
+            }
+          
+        }
+
+        public bool DeleteAll()
+        {
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    IEnumerable<T> entities = con.GetAll<T>();
+                    foreach (T entity in entities)
+                    {
+                        entity.GetType().GetProperty("IsActive").SetValue(entity, false);
+                    }
+                    return con.Update(entities);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return false;
+            }
+        }
+
+
 
         public bool Remove(T entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    entity.GetType().GetProperty("IsActive").SetValue(entity, false);
+                    return con.Delete(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return false;
+            }
         }
 
         public bool Remove(int ID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    T entity = con.Get<T>(ID);
+                    return con.Delete(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return false;
+            }
         }
 
         public bool RemoveAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    return con.DeleteAll<T>();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return false;
+            }
         }
 
-        public bool Update(T entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
