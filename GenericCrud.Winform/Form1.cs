@@ -19,7 +19,17 @@ namespace GenericCrud.Winform
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(new Business.UserManager().Add(new Entity.Users()).ToString());
+            Entity.Users entity = new Entity.Users();
+            entity.Name = "Deneme";
+            entity.BirthDate = new DateTime(1991, 06, 13);
+            entity.DateCreated = DateTime.Now;
+            entity.DateModifed = DateTime.Now.AddDays(-5);
+            entity.UserIDCreated = -1;
+            entity.UserIDModified = 5;
+
+            Entity.Users cu = Helper.Object.Clone<Entity.Users>(entity);
+
+            MessageBox.Show(new Business.UserManager().Add(entity).ToString());
         }
 
         private void button2_Click(object sender, EventArgs e)

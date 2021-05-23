@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericCrud.Business", "Gen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericCrud.Winform", "GenericCrud.Winform\GenericCrud.Winform.csproj", "{19354049-DB2A-4DD8-8078-2FC78F9A27A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericCrud.Helper", "GenericCrud.Helper\GenericCrud.Helper.csproj", "{3697C08B-BBD7-408D-B7B7-F1567A266972}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{19354049-DB2A-4DD8-8078-2FC78F9A27A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19354049-DB2A-4DD8-8078-2FC78F9A27A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19354049-DB2A-4DD8-8078-2FC78F9A27A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3697C08B-BBD7-408D-B7B7-F1567A266972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3697C08B-BBD7-408D-B7B7-F1567A266972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3697C08B-BBD7-408D-B7B7-F1567A266972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3697C08B-BBD7-408D-B7B7-F1567A266972}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{E6778F83-D867-4942-A118-DDD9C59BF760} = {3767D0DB-4083-4F85-A54D-3FD53DEAC23A}
 		{CD41DE7D-3CEE-46EC-9B47-709DE4471DB6} = {3767D0DB-4083-4F85-A54D-3FD53DEAC23A}
 		{19354049-DB2A-4DD8-8078-2FC78F9A27A3} = {B27CA517-AA2C-4AD0-95EE-D1BB5E0E6345}
+		{3697C08B-BBD7-408D-B7B7-F1567A266972} = {3767D0DB-4083-4F85-A54D-3FD53DEAC23A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA1FBC14-F8C9-4D48-9BF8-48E8D4DF99F1}

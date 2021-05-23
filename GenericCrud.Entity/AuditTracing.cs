@@ -12,10 +12,9 @@ namespace GenericCrud.Entity
     {
         public string Object { get; set; }
         public int ReferanceID { get; set; }
-        public string Property { get; set; }
-        public string OldValue { get; set; }
+        public AuditType AuditType { get; set; } 
+        public string OldValue { get; set; } 
         public string NewValue { get; set; }
-        public AuditType AuditType { get; set; }
     }
     public enum AuditType
     {

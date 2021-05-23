@@ -88,6 +88,10 @@
       <Project>{e6778f83-d867-4942-a118-ddd9c59bf760}</Project>
       <Name>GenericCrud.Entity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GenericCrud.Helper\GenericCrud.Helper.csproj">
+      <Project>{3697c08b-bbd7-408d-b7b7-f1567a266972}</Project>
+      <Name>GenericCrud.Helper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

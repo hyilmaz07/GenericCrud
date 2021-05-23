@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace GenericCrud.Core.Repositories
 {
- public   class LogRepository:Connection.Connection
+    public class LogRepository : Connection.Connection
     {
         public int Insert(Logs model)
         {
             try
             {
-                using (var con =GetConnection)
+                using (var con = GetConnection)
                 {
                     return int.Parse(con.Insert(model).ToString());
                 }
