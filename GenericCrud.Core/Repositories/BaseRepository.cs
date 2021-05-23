@@ -35,13 +35,10 @@ namespace GenericCrud.Core.Repositories
                     Type type = typeof(T);
                     at.Object = type.Name;
                     at.AuditType = Entity.AuditType.Update;
-                    at.DateCreated = Convert.ToDateTime(entity.GetType().GetProperty("DateCreated").GetValue(entity));
-                    at.DateModifed = Convert.ToDateTime(entity.GetType().GetProperty("DateModifed").GetValue(entity));
-                    at.UserIDCreated = Convert.ToInt32(entity.GetType().GetProperty("UserIDCreated").GetValue(entity));
-                    at.UserIDModified = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
                     at.Object = entity.GetType().ToString();
                     at.ReferanceID = Convert.ToInt32(entity.GetType().GetProperty("ID").GetValue(entity));
-
+                    at.UserID = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
+                    at.Date = DateTime.Now;
                     T oldEntity = con.Get<T>(at.ReferanceID);
                     at.OldValue = Helper.Object.Serialize(oldEntity);
                     at.NewValue = Helper.Object.Serialize(entity);
@@ -68,10 +65,8 @@ namespace GenericCrud.Core.Repositories
                     Type type = typeof(T);
                     at.Object = type.Name;
                     at.AuditType = Entity.AuditType.Update;
-                    at.DateCreated = Convert.ToDateTime(entityNews.GetType().GetProperty("DateCreated").GetValue(entityNews));
-                    at.DateModifed = Convert.ToDateTime(entityNews.GetType().GetProperty("DateModifed").GetValue(entityNews));
-                    at.UserIDCreated = Convert.ToInt32(entityNews.GetType().GetProperty("UserIDCreated").GetValue(entityNews));
-                    at.UserIDModified = Convert.ToInt32(entityNews.GetType().GetProperty("UserIDModified").GetValue(entityNews));
+                    at.UserID = Convert.ToInt32(entityNews.GetType().GetProperty("UserIDModified").GetValue(entityNews));
+                    at.Date = DateTime.Now;
                     at.Object = entityNews.GetType().ToString();
                     at.ReferanceID = Convert.ToInt32(entityNews.GetType().GetProperty("ID").GetValue(entityNews));
 
@@ -126,7 +121,23 @@ namespace GenericCrud.Core.Repositories
             {
                 using (var con = GetConnection)
                 {
+                    T entityOld = Helper.Object.Clone<T>(entity);
+
                     entity.GetType().GetProperty("IsActive").SetValue(entity, false);
+
+                    Entity.AuditTracing at = new Entity.AuditTracing();
+                    Type type = typeof(T);
+                    at.Object = type.Name;
+                    at.AuditType = Entity.AuditType.Delete;
+                    at.UserID = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
+                    at.Date = DateTime.Now;
+                    at.Object = entity.GetType().ToString();
+                    at.ReferanceID = Convert.ToInt32(entity.GetType().GetProperty("ID").GetValue(entity));
+                    at.OldValue = Helper.Object.Serialize(entityOld);
+                    at.NewValue = Helper.Object.Serialize(entity);
+                    int AuditID = AuditRepository.CreateAuditTracing(at);
+
+                    entity.GetType().GetProperty("AuditID").SetValue(entity, AuditID);
                     return con.Update(entity);
                 }
             }
@@ -144,6 +155,21 @@ namespace GenericCrud.Core.Repositories
                 using (var con = GetConnection)
                 {
                     T entity = con.Get<T>(ID);
+                    T entityOld = Helper.Object.Clone<T>(entity);
+
+                    Entity.AuditTracing at = new Entity.AuditTracing();
+                    Type type = typeof(T);
+                    at.Object = type.Name;
+                    at.AuditType = Entity.AuditType.Delete;
+                    at.UserID = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
+                    at.Date = DateTime.Now;
+                    at.Object = entity.GetType().ToString();
+                    at.ReferanceID = Convert.ToInt32(entity.GetType().GetProperty("ID").GetValue(entity));
+                    at.OldValue = Helper.Object.Serialize(entityOld);
+                    at.NewValue = Helper.Object.Serialize(entity);
+                    int AuditID = AuditRepository.CreateAuditTracing(at);
+
+                    entity.GetType().GetProperty("AuditID").SetValue(entity, AuditID);
                     entity.GetType().GetProperty("IsActive").SetValue(entity, false);
                     return con.Update(entity);
                 }
@@ -165,6 +191,22 @@ namespace GenericCrud.Core.Repositories
                     IEnumerable<T> entities = con.GetAll<T>();
                     foreach (T entity in entities)
                     {
+                        T entityOld = Helper.Object.Clone<T>(entity);
+
+                        Entity.AuditTracing at = new Entity.AuditTracing();
+                        Type type = typeof(T);
+                        at.Object = type.Name;
+                        at.AuditType = Entity.AuditType.Delete;
+                        at.UserID = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
+                        at.Date = DateTime.Now;
+                        at.Object = entity.GetType().ToString();
+                        at.ReferanceID = Convert.ToInt32(entity.GetType().GetProperty("ID").GetValue(entity));
+                        at.OldValue = Helper.Object.Serialize(entityOld);
+                        at.NewValue = Helper.Object.Serialize(entity);
+                        int AuditID = AuditRepository.CreateAuditTracing(at);
+
+                        entity.GetType().GetProperty("AuditID").SetValue(entity, AuditID);
+
                         entity.GetType().GetProperty("IsActive").SetValue(entity, false);
                     }
                     return con.Update(entities);
@@ -185,7 +227,20 @@ namespace GenericCrud.Core.Repositories
             {
                 using (var con = GetConnection)
                 {
-                    entity.GetType().GetProperty("IsActive").SetValue(entity, false);
+                    T entityOld = Helper.Object.Clone<T>(entity);
+
+                    Entity.AuditTracing at = new Entity.AuditTracing();
+                    Type type = typeof(T);
+                    at.Object = type.Name;
+                    at.AuditType = Entity.AuditType.Remove;
+                    at.UserID = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
+                    at.Date = DateTime.Now;
+                    at.Object = entity.GetType().ToString();
+                    at.ReferanceID = Convert.ToInt32(entity.GetType().GetProperty("ID").GetValue(entity));
+                    at.OldValue = Helper.Object.Serialize(entityOld);
+                    at.NewValue = null;
+                    int AuditID = AuditRepository.CreateAuditTracing(at);
+
                     return con.Delete(entity);
                 }
             }
@@ -203,6 +258,19 @@ namespace GenericCrud.Core.Repositories
                 using (var con = GetConnection)
                 {
                     T entity = con.Get<T>(ID);
+
+                    Entity.AuditTracing at = new Entity.AuditTracing();
+                    Type type = typeof(T);
+                    at.Object = type.Name;
+                    at.AuditType = Entity.AuditType.Remove;
+                    at.UserID = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
+                    at.Date = DateTime.Now;
+                    at.Object = entity.GetType().ToString();
+                    at.ReferanceID = Convert.ToInt32(entity.GetType().GetProperty("ID").GetValue(entity));
+                    at.OldValue = Helper.Object.Serialize(entity);
+                    at.NewValue = null;
+                    int AuditID = AuditRepository.CreateAuditTracing(at);
+
                     return con.Delete(entity);
                 }
             }

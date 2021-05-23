@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 namespace GenericCrud.Entity
 {
     [Table("AuditTracing")]
-    public class AuditTracing : BaseEntity
+    public class AuditTracing 
     {
+        public int ID { get; set; }
         public string Object { get; set; }
         public int ReferanceID { get; set; }
         public AuditType AuditType { get; set; } 
         public string OldValue { get; set; } 
         public string NewValue { get; set; }
+        public DateTime Date { get; set; }
+        public int UserID { get; set; }
     }
     public enum AuditType
     {
