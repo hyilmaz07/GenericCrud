@@ -10,6 +10,7 @@ namespace GenericCrud.Core.Interfaces
     {
         int Add(T entity);
         bool Update(T entity);
+        bool Update(T entityOld, T entityNews);
         T Get(int ID);
         IEnumerable<T> GetAll();
         bool Delete(T entity);

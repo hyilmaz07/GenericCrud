@@ -50,5 +50,14 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GenericCrud.Entity\GenericCrud.Entity.csproj">
+      <Project>{e6778f83-d867-4942-a118-ddd9c59bf760}</Project>
+      <Name>GenericCrud.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -58,12 +58,15 @@
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\LogRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
-    <Compile Include="Audit\AuditTracing.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericCrud.Entity\GenericCrud.Entity.csproj">
       <Project>{e6778f83-d867-4942-a118-ddd9c59bf760}</Project>
       <Name>GenericCrud.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GenericCrud.Helper\GenericCrud.Helper.csproj">
+      <Project>{3697c08b-bbd7-408d-b7b7-f1567a266972}</Project>
+      <Name>GenericCrud.Helper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

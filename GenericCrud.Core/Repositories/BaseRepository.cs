@@ -26,8 +26,8 @@ namespace GenericCrud.Core.Repositories
                     at.UserIDCreated = Convert.ToInt32(entity.GetType().GetProperty("UserIDCreated").GetValue(entity));
                     at.UserIDModified = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
                     at.OldValue = null;
-                    at.NewValue = Audit.AuditTracing.Serialize(entity);
-                    Audit.AuditTracing.CreateAuditTracing(at);
+                    at.NewValue = Helper.Object.Serialize(entity);
+                    AuditRepository.CreateAuditTracing(at);
                     return ReferanceID;
                 }
             }
@@ -55,10 +55,39 @@ namespace GenericCrud.Core.Repositories
                     at.ReferanceID = Convert.ToInt32(entity.GetType().GetProperty("ID").GetValue(entity));
 
                     T oldEntity = con.Get<T>(at.ReferanceID);
-                    at.OldValue = Audit.AuditTracing.Serialize(oldEntity);
-                    at.NewValue = Audit.AuditTracing.Serialize(entity);
-                    Audit.AuditTracing.CreateAuditTracing(at);
+                    at.OldValue = Helper.Object.Serialize(oldEntity);
+                    at.NewValue = Helper.Object.Serialize(entity);
+                    AuditRepository.CreateAuditTracing(at);
                     return con.Update(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogRepository.CreateLog(ex);
+                return false;
+            }
+        }
+        public bool Update(T entityOld, T entityNews)
+        {
+            try
+            {
+                using (var con = GetConnection)
+                {
+                    Entity.AuditTracing at = new Entity.AuditTracing();
+                    Type type = typeof(T);
+                    at.Object = type.Name;
+                    at.AuditType = Entity.AuditType.Update;
+                    at.DateCreated = Convert.ToDateTime(entityNews.GetType().GetProperty("DateCreated").GetValue(entityNews));
+                    at.DateModifed = Convert.ToDateTime(entityNews.GetType().GetProperty("DateModifed").GetValue(entityNews));
+                    at.UserIDCreated = Convert.ToInt32(entityNews.GetType().GetProperty("UserIDCreated").GetValue(entityNews));
+                    at.UserIDModified = Convert.ToInt32(entityNews.GetType().GetProperty("UserIDModified").GetValue(entityNews));
+                    at.Object = entityNews.GetType().ToString();
+                    at.ReferanceID = Convert.ToInt32(entityNews.GetType().GetProperty("ID").GetValue(entityNews));
+
+                    at.OldValue = Helper.Object.Serialize(entityOld);
+                    at.NewValue = Helper.Object.Serialize(entityNews);
+                    AuditRepository.CreateAuditTracing(at);
+                    return con.Update(entityNews);
                 }
             }
             catch (Exception ex)

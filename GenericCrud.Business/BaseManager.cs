@@ -65,5 +65,10 @@ namespace GenericCrud.Business
         {
             return repo.Update(entity);
         }
+
+        public bool Update(T entityOld, T entityNews)
+        {
+            return repo.Update(entityOld, entityNews);
+        }
     }
 }
