@@ -23,9 +23,9 @@ namespace GenericCrud.Core.Repositories
                 return 0;
             }
         }
-        public static void CreateAuditTracing(Entity.AuditTracing entity)
+        public static int CreateAuditTracing(Entity.AuditTracing entity)
         {
-            new AuditTracing().Insert(new Entity.AuditTracing());
+            return new AuditRepository().Insert(new Entity.AuditTracing());
         }
     }
 }

@@ -16,19 +16,7 @@ namespace GenericCrud.Core.Repositories
             {
                 using (var con = GetConnection)
                 {
-                    int ReferanceID = 0;// (int)con.Insert(entity);
-                    Entity.AuditTracing at = new Entity.AuditTracing();
-                    Type type = typeof(T);
-                    at.Object = type.Name;
-                    at.AuditType = Entity.AuditType.Insert;
-                    at.DateCreated = Convert.ToDateTime(entity.GetType().GetProperty("DateCreated").GetValue(entity));
-                    at.DateModifed = Convert.ToDateTime(entity.GetType().GetProperty("DateModifed").GetValue(entity));
-                    at.UserIDCreated = Convert.ToInt32(entity.GetType().GetProperty("UserIDCreated").GetValue(entity));
-                    at.UserIDModified = Convert.ToInt32(entity.GetType().GetProperty("UserIDModified").GetValue(entity));
-                    at.OldValue = null;
-                    at.NewValue = Helper.Object.Serialize(entity);
-                    AuditRepository.CreateAuditTracing(at);
-                    return ReferanceID;
+                    return (int)con.Insert(entity);
                 }
             }
             catch (Exception ex)
@@ -57,7 +45,10 @@ namespace GenericCrud.Core.Repositories
                     T oldEntity = con.Get<T>(at.ReferanceID);
                     at.OldValue = Helper.Object.Serialize(oldEntity);
                     at.NewValue = Helper.Object.Serialize(entity);
-                    AuditRepository.CreateAuditTracing(at);
+                    int AuditID = AuditRepository.CreateAuditTracing(at);
+
+                    entity.GetType().GetProperty("AuditID").SetValue(entity, AuditID);
+
                     return con.Update(entity);
                 }
             }
@@ -86,7 +77,9 @@ namespace GenericCrud.Core.Repositories
 
                     at.OldValue = Helper.Object.Serialize(entityOld);
                     at.NewValue = Helper.Object.Serialize(entityNews);
-                    AuditRepository.CreateAuditTracing(at);
+                    int AuditID = AuditRepository.CreateAuditTracing(at);
+
+                    entityNews.GetType().GetProperty("AuditID").SetValue(entityNews, AuditID);
                     return con.Update(entityNews);
                 }
             }

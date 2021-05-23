@@ -16,5 +16,6 @@ namespace GenericCrud.Entity
         public int? UserIDModified { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateModifed { get; set; }
+        public int? AuditID { get; set; }
     }
 }
